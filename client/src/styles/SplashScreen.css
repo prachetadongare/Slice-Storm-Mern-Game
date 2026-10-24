@@ -1,0 +1,153 @@
+.splash-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    isolation: isolate;
+    background: #087ed7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Fill the entire viewport */
+.splash-background {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Loading interface */
+.splash-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    box-sizing: border-box;
+    padding:
+        0 max(20px, env(safe-area-inset-right)) max(35px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+
+    background: linear-gradient(to bottom,
+            transparent 60%,
+            rgba(0, 12, 42, 0.12) 76%,
+            rgba(0, 12, 42, 0.65) 100%);
+}
+
+.splash-loading {
+    width: min(420px, 100%);
+    color: #fff;
+    text-shadow: 0 2px 5px #00132e;
+}
+
+.splash-loading-title {
+    margin: 0 0 12px;
+    text-align: center;
+    font-size: clamp(11px, 2vw, 15px);
+    font-weight: 900;
+    letter-spacing: clamp(1px, 0.3vw, 2px);
+}
+
+.splash-progress-track {
+    width: 100%;
+    height: 20px;
+    padding: 3px;
+    box-sizing: border-box;
+    overflow: hidden;
+    background: #101323;
+    border: 2px solid #ffe69a;
+    border-radius: 5px;
+    box-shadow: 0 4px 14px #0008;
+}
+
+.splash-progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg,
+            #ff8a18,
+            #ffe45c,
+            #ffb52e);
+    transition: width 100ms linear;
+}
+
+.splash-progress-info {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 9px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+/* Phones and narrow screens */
+@media (max-width: 600px) {
+    .splash-background {
+        object-position: center center;
+    }
+
+    .splash-overlay {
+        padding-bottom: max(24px, env(safe-area-inset-bottom));
+    }
+
+    .splash-loading {
+        width: min(360px, 100%);
+    }
+
+    .splash-loading-title {
+        margin-bottom: 9px;
+        font-size: clamp(10px, 3vw, 14px);
+    }
+
+    .splash-progress-track {
+        height: 17px;
+    }
+
+    .splash-progress-info {
+        font-size: 11px;
+    }
+}
+
+/* Tablets and medium-sized screens */
+@media (min-width: 601px) and (max-width: 1024px) {
+    .splash-background {
+        object-position: center center;
+    }
+
+    .splash-loading {
+        width: min(400px, 85%);
+    }
+}
+
+/* Short landscape screens */
+@media (max-height: 500px) {
+    .splash-overlay {
+        padding-bottom: max(12px, env(safe-area-inset-bottom));
+    }
+
+    .splash-loading {
+        width: min(340px, 75%);
+    }
+
+    .splash-loading-title {
+        margin-bottom: 6px;
+        font-size: 11px;
+    }
+
+    .splash-progress-track {
+        height: 15px;
+    }
+
+    .splash-progress-info {
+        margin-top: 5px;
+        font-size: 10px;
+    }
+}

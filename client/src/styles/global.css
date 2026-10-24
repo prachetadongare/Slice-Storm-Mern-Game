@@ -1,0 +1,1142 @@
+/* ==========================================
+   SLICE STORM — RESPONSIVE GLOBAL STYLES
+   ========================================== */
+
+:root {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #fff;
+    background: #100d24;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    --gold: #ffcf4a;
+    --purple: #24153f;
+    --panel: #17132be8;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    width: 100%;
+    min-width: 320px;
+    min-height: 100%;
+    margin: 0;
+}
+
+body {
+    width: 100%;
+    min-width: 320px;
+    min-height: 100vh;
+    min-height: 100dvh;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+#root {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible {
+    outline: 3px solid #fff176;
+    outline-offset: 4px;
+}
+
+img,
+canvas,
+video {
+    max-width: 100%;
+}
+
+/* ==========================================
+   APP SHELL
+   ========================================== */
+
+.app {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: clip;
+
+    background:
+        linear-gradient(180deg,
+            rgba(12, 9, 28, 0.2),
+            rgba(16, 8, 32, 0.55)),
+        url("/dojo-bg.jpg") center center / cover no-repeat,
+        #17112b;
+}
+
+.app::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    content: "";
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse at 50% 0%,
+            rgba(255, 188, 85, 0.12),
+            transparent 43%),
+        radial-gradient(ellipse at 12% 48%,
+            rgba(255, 107, 53, 0.12),
+            transparent 30%),
+        radial-gradient(ellipse at 90% 43%,
+            rgba(140, 101, 255, 0.14),
+            transparent 30%);
+}
+
+/* ==========================================
+   APP HEADER
+   ========================================== */
+
+.topbar {
+    position: relative;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    min-height: 64px;
+    padding: 14px clamp(14px, 3vw, 36px);
+    background: rgba(12, 9, 28, 0.78);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.brand {
+    min-width: 0;
+    color: #fff;
+    font-size: clamp(15px, 2vw, 24px);
+    font-weight: 1000;
+    letter-spacing: clamp(0.5px, 0.2vw, 2px);
+    text-decoration: none;
+    text-shadow: 0 3px 0 #6c281f;
+}
+
+.brand-icon {
+    margin-right: 7px;
+    color: var(--gold);
+}
+
+.topbar-label {
+    max-width: 45%;
+    color: #e0d5ed;
+    font-size: clamp(8px, 0.9vw, 11px);
+    font-weight: 800;
+    letter-spacing: clamp(0.5px, 0.15vw, 2px);
+    text-align: right;
+}
+
+/* ==========================================
+   MAIN MENU SCREEN
+   ========================================== */
+
+.ninja-screen {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    min-height: 650px;
+    overflow: clip;
+}
+
+/* ==========================================
+   TOP-RIGHT RESOURCES AND MENU
+   ========================================== */
+
+.game-topbar {
+    position: absolute;
+    z-index: 40;
+    top: 16px;
+    right: 20px;
+    max-width: calc(100% - 32px);
+}
+
+.game-resource-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.resource-counter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 7px 12px;
+    color: #fff;
+    background: rgba(21, 19, 42, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 24px;
+    box-shadow: 0 4px 16px #0005;
+}
+
+.resource-counter span {
+    font-size: 1rem;
+}
+
+.resource-counter strong {
+    font-size: 0.85rem;
+}
+
+.menu-toggle {
+    min-height: 36px;
+    padding: 8px 12px;
+    color: #fff;
+    background: var(--panel);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 900;
+}
+
+.menu-toggle:hover,
+.menu-toggle[aria-expanded="true"] {
+    background: #4b2b78;
+    border-color: #ffe08a;
+}
+
+.menu-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 60;
+    display: grid;
+    gap: 4px;
+    width: min(185px, calc(100vw - 24px));
+    padding: 8px;
+    background: #17132bf5;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 12px;
+    box-shadow: 0 12px 35px #0008;
+}
+
+.menu-dropdown button {
+    width: 100%;
+    padding: 11px;
+    color: #fff;
+    text-align: left;
+    background: transparent;
+    border: 0;
+    border-radius: 7px;
+}
+
+.menu-dropdown button:hover {
+    background: #ffffff18;
+}
+
+/* ==========================================
+   LEFT WOODEN NAVIGATION
+   ========================================== */
+
+.wooden-sidebar {
+    position: absolute;
+    z-index: 20;
+    top: 50%;
+    left: clamp(16px, 2.5vw, 36px);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 1.3vw, 16px);
+    width: clamp(185px, 18vw, 250px);
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    transform: translateY(-50%);
+}
+
+.wooden-plank {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: clamp(8px, 1.3vw, 16px);
+    width: 100%;
+    min-width: 0;
+    min-height: clamp(54px, 6vw, 68px);
+    padding: 12px clamp(12px, 1.7vw, 22px) 12px 24px;
+    color: #fff5df;
+
+    background:
+        repeating-linear-gradient(0deg,
+            transparent 0,
+            #4b210a20 3px,
+            transparent 6px,
+            transparent 12px),
+        linear-gradient(180deg,
+            #e0b276 0%,
+            #b77742 25%,
+            #82451f 65%,
+            #bd8048 100%);
+
+    border: 2px solid #f4cf8a;
+    border-radius: 11px;
+    box-shadow:
+        inset 0 2px 4px #fff0bf80,
+        inset 0 -4px 6px #35170666,
+        0 5px 0 #4a2414,
+        0 9px 18px #0006;
+
+    font-size: clamp(0.72rem, 1.05vw, 0.95rem);
+    font-weight: 900;
+    letter-spacing: clamp(0px, 0.12vw, 1.2px);
+    text-shadow: 0 2px 4px #321607;
+
+    transition: filter 180ms ease, transform 180ms ease;
+}
+
+.wooden-plank-icon {
+    flex: 0 0 26px;
+    font-size: clamp(1.05rem, 1.6vw, 1.4rem);
+    text-align: center;
+}
+
+.wooden-plank-label {
+    min-width: 0;
+    white-space: nowrap;
+}
+
+.wooden-plank::before,
+.wooden-plank::after {
+    position: absolute;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    content: "";
+    border-radius: 50%;
+    background: #f0d2a0;
+    box-shadow: inset 1px 1px 2px #5a3218;
+    transform: translateY(-50%);
+}
+
+.wooden-plank::before {
+    left: 6px;
+}
+
+.wooden-plank::after {
+    right: 6px;
+}
+
+.wooden-plank:hover {
+    filter: brightness(1.12);
+    transform: translateX(4px);
+}
+
+.wooden-plank:active {
+    transform: translateY(2px);
+}
+
+/* ==========================================
+   CENTER CONTENT
+   ========================================== */
+
+.ninja-layout {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: 0;
+    min-height: 650px;
+
+    /*
+    Reserve room for the left navigation and
+    keep the title and fruit cards in the center.
+  */
+    padding:
+        82px clamp(18px, 3vw, 40px) 32px clamp(220px, 24vw, 320px);
+}
+
+.ninja-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 720px;
+    min-width: 0;
+    margin: 0 auto;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.ninja-eyebrow {
+    margin: 0 0 14px;
+    color: #ffe6a0;
+    font-size: clamp(0.6rem, 1vw, 0.8rem);
+    font-weight: 900;
+    letter-spacing: clamp(0.5px, 0.22vw, 2.5px);
+    line-height: 1.6;
+}
+
+.ninja-status-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 8px;
+    background: #9cff5b;
+    border-radius: 50%;
+    box-shadow: 0 0 12px #9cff5b;
+}
+
+.ninja-heading {
+    max-width: 100%;
+    margin: 0;
+    color: #ffc43e;
+    font-size: clamp(2.2rem, 5vw, 4.7rem);
+    font-weight: 1000;
+    font-style: italic;
+    line-height: 1.08;
+    letter-spacing: clamp(-2px, -0.15vw, -0.5px);
+    overflow-wrap: normal;
+    text-shadow: 0 5px 0 #963f20, 0 10px 18px #0008;
+}
+
+.ninja-heading span {
+    color: #fff8e8;
+    text-shadow: 0 5px 0 #777083, 0 10px 18px #0008;
+}
+
+.ninja-subtitle {
+    max-width: 100%;
+    margin: 12px 0 0;
+    color: #fff;
+    font-size: clamp(0.75rem, 1.2vw, 0.95rem);
+    line-height: 1.6;
+}
+
+/* ==========================================
+   FRUIT MODE CARDS
+   ========================================== */
+
+.ninja-mode-row {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: start;
+    gap: clamp(8px, 1.5vw, 18px);
+    width: 100%;
+    max-width: 640px;
+    margin: clamp(20px, 3vw, 32px) auto 0;
+}
+
+.ninja-mode-card {
+    --mode-color: #239cff;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    color: #fff;
+    background: transparent;
+    border: 0;
+    transition: transform 180ms ease;
+}
+
+.ninja-mode-card.blue {
+    --mode-color: #239cff;
+}
+
+.ninja-mode-card.green {
+    --mode-color: #5ee345;
+}
+
+.ninja-mode-card.orange {
+    --mode-color: #ff9e26;
+}
+
+.ninja-mode-card.purple {
+    --mode-color: #bf7cff;
+}
+
+.ninja-card-ring {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    max-width: 124px;
+    aspect-ratio: 1;
+    background: radial-gradient(circle, #39367c 0%, #17163f 75%);
+    border: clamp(4px, 0.55vw, 6px) solid var(--mode-color);
+    border-radius: 50%;
+    box-shadow:
+        0 0 13px var(--mode-color),
+        inset 0 0 18px #0007;
+    transition: box-shadow 180ms ease, border-width 180ms ease;
+}
+
+.ninja-card-fruit {
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    line-height: 1.2;
+    filter: drop-shadow(0 7px 5px #0008);
+    transition: transform 180ms ease;
+}
+
+.ninja-card-name {
+    max-width: 100%;
+    color: #fff;
+    font-size: clamp(0.55rem, 0.85vw, 0.75rem);
+    font-weight: 1000;
+    letter-spacing: clamp(0px, 0.1vw, 1px);
+    overflow-wrap: anywhere;
+    text-shadow: 0 2px 4px #000;
+}
+
+.ninja-mode-card:hover {
+    transform: translateY(-4px);
+}
+
+.ninja-mode-card:hover .ninja-card-fruit {
+    transform: scale(1.1) rotate(-8deg);
+}
+
+.ninja-mode-card.active .ninja-card-ring {
+    border-width: 7px;
+    box-shadow:
+        0 0 0 3px #ffffff38,
+        0 0 22px var(--mode-color),
+        inset 0 0 18px #0007;
+}
+
+.ninja-mode-card.active .ninja-card-name {
+    color: #ffe79c;
+}
+
+.ninja-mode-card:focus-visible {
+    outline: 3px solid #fff4b0;
+    outline-offset: 5px;
+}
+
+.ninja-mode-description {
+    max-width: 100%;
+    min-height: 22px;
+    margin: 14px 0 0;
+    color: #fff0ca;
+    font-size: clamp(0.75rem, 1vw, 0.85rem);
+    line-height: 1.6;
+}
+
+.ninja-notice {
+    max-width: 100%;
+    margin: 8px 0 0;
+    color: #ffe79c;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+/* ==========================================
+   PLAY BUTTON AND TAGLINE
+   ========================================== */
+
+.ninja-play-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    width: min(100%, 220px);
+    min-height: 48px;
+    margin-top: 18px;
+    padding: 12px 22px;
+    color: #35200a;
+    background: linear-gradient(180deg, #ffe478, #ff9c27);
+    border: 2px solid #fff0a4;
+    border-radius: 12px;
+    box-shadow: 0 5px 0 #9d481c, 0 8px 25px #ff9e2644;
+    font-size: 0.9rem;
+    font-weight: 1000;
+    letter-spacing: 1.2px;
+    transition: transform 160ms ease, filter 160ms ease;
+}
+
+.ninja-play-button:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+.ninja-play-button:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #9d481c;
+}
+
+.ninja-tagline {
+    max-width: 100%;
+    margin: 24px 0 0;
+    color: #fff0d4;
+    font-size: clamp(0.55rem, 0.85vw, 0.68rem);
+    font-weight: 800;
+    letter-spacing: clamp(0.5px, 0.13vw, 1.5px);
+    line-height: 1.7;
+}
+
+/* ==========================================
+   GAMEPLAY SCREEN
+   ========================================== */
+
+.game-screen {
+    width: 100%;
+    max-width: 1100px;
+    min-width: 0;
+    margin: auto;
+    padding: clamp(12px, 3vw, 30px);
+}
+
+.game-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.back-button {
+    min-height: 40px;
+    padding: 9px 14px;
+    color: #fff;
+    background: #ffffff12;
+    border: 1px solid #ffffff40;
+    border-radius: 9px;
+}
+
+.mode-badge {
+    color: #ffe16b;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.score-placeholder {
+    color: #e2d8f2;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.score-placeholder strong {
+    margin-left: 8px;
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+.game-screen canvas,
+.game-canvas {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 800 / 450;
+    background: #17132b;
+    border: 2px solid #a98ae8;
+    border-radius: 14px;
+    box-shadow: 0 0 25px #7c3aed33;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.game-hint {
+    max-width: 100%;
+    color: #e2d8f2;
+    text-align: center;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+/* ==========================================
+   FOOTER
+   ========================================== */
+
+.app-footer {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 16px 12px 14px;
+    color: #d1c0e1;
+    text-align: center;
+    font-size: clamp(0.58rem, 0.8vw, 0.68rem);
+    letter-spacing: 1px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.app-footer span {
+    padding: 0 8px;
+    color: #ffda61;
+}
+
+/* ==========================================
+   SMALL DESKTOPS AND TABLETS
+   ========================================== */
+
+@media (max-width: 1050px) and (min-width: 701px) {
+    .ninja-screen {
+        min-height: 620px;
+    }
+
+    .wooden-sidebar {
+        left: 14px;
+        width: 165px;
+        gap: 12px;
+    }
+
+    .wooden-plank {
+        min-height: 58px;
+        gap: 8px;
+        padding: 10px 10px 10px 18px;
+        font-size: 0.7rem;
+        letter-spacing: 0;
+    }
+
+    .wooden-plank-icon {
+        flex-basis: 22px;
+        font-size: 1.1rem;
+    }
+
+    .ninja-layout {
+        min-height: 620px;
+        padding: 78px 16px 28px 190px;
+    }
+
+    .ninja-center {
+        max-width: 620px;
+    }
+
+    .ninja-mode-row {
+        gap: 9px;
+    }
+
+    .ninja-card-ring {
+        max-width: 100px;
+    }
+}
+
+/* ==========================================
+   PHONES AND NARROW TABLETS
+   ========================================== */
+
+@media (max-width: 700px) {
+    .topbar {
+        min-height: 56px;
+        padding: 12px 14px;
+    }
+
+    .ninja-screen {
+        min-height: auto;
+        overflow: visible;
+    }
+
+    /* Put resources in the top row without overlapping the title. */
+    .game-topbar {
+        position: relative;
+        top: auto;
+        right: auto;
+        z-index: 40;
+        width: 100%;
+        max-width: none;
+        padding: 12px 12px 0;
+    }
+
+    .game-resource-bar {
+        justify-content: flex-end;
+        gap: 6px;
+    }
+
+    .resource-counter {
+        min-height: 34px;
+        padding: 6px 9px;
+    }
+
+    .menu-toggle {
+        min-height: 34px;
+        padding: 7px 10px;
+    }
+
+    /* Navigation becomes two columns above the title. */
+    .wooden-sidebar {
+        position: relative;
+        top: auto;
+        left: auto;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        width: calc(100% - 24px);
+        max-width: 520px;
+        margin: 14px auto 0;
+        transform: none;
+    }
+
+    .wooden-plank {
+        justify-content: center;
+        gap: 7px;
+        min-height: 52px;
+        padding: 9px 8px;
+        font-size: clamp(0.65rem, 2.3vw, 0.8rem);
+        letter-spacing: 0;
+    }
+
+    .wooden-plank-icon {
+        flex-basis: 22px;
+        font-size: 1.15rem;
+    }
+
+    .wooden-plank::before {
+        left: 4px;
+        width: 4px;
+        height: 4px;
+    }
+
+    .wooden-plank::after {
+        right: 4px;
+        width: 4px;
+        height: 4px;
+    }
+
+    .ninja-layout {
+        display: flex;
+        min-height: auto;
+        padding: 20px 16px 30px;
+    }
+
+    .ninja-center {
+        width: 100%;
+        max-width: 540px;
+        padding: 12px 0;
+    }
+
+    .ninja-heading {
+        font-size: clamp(2.2rem, 8vw, 3.6rem);
+    }
+
+    .ninja-subtitle {
+        max-width: 420px;
+    }
+
+    .ninja-mode-row {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 24px;
+    }
+
+    .ninja-card-ring {
+        max-width: 100px;
+    }
+
+    .ninja-card-fruit {
+        font-size: clamp(1.7rem, 5vw, 2.5rem);
+    }
+
+    .ninja-card-name {
+        font-size: clamp(0.5rem, 1.8vw, 0.7rem);
+        letter-spacing: 0;
+    }
+
+    .ninja-tagline {
+        margin-top: 20px;
+    }
+
+    .game-screen {
+        padding: 12px;
+    }
+
+    .game-toolbar {
+        justify-content: space-between;
+    }
+}
+
+/* ==========================================
+   SMALL PHONES
+   ========================================== */
+
+@media (max-width: 480px) {
+    .topbar {
+        gap: 8px;
+        padding: 10px 12px;
+    }
+
+    .brand {
+        font-size: 15px;
+        letter-spacing: 0.5px;
+    }
+
+    .brand-icon {
+        margin-right: 4px;
+    }
+
+    .topbar-label {
+        max-width: 42%;
+        font-size: 8px;
+        letter-spacing: 0.5px;
+    }
+
+    .ninja-screen {
+        min-height: auto;
+    }
+
+    .game-topbar {
+        padding: 10px 10px 0;
+    }
+
+    .resource-counter {
+        gap: 4px;
+        padding: 6px 8px;
+    }
+
+    .resource-counter span {
+        font-size: 0.85rem;
+    }
+
+    .resource-counter strong {
+        font-size: 0.75rem;
+    }
+
+    .menu-toggle {
+        padding: 7px 9px;
+        font-size: 0.65rem;
+    }
+
+    .wooden-sidebar {
+        width: calc(100% - 20px);
+        gap: 8px;
+        margin-top: 12px;
+    }
+
+    .wooden-plank {
+        gap: 5px;
+        min-height: 48px;
+        padding: 8px 6px;
+        font-size: clamp(0.6rem, 2.6vw, 0.72rem);
+    }
+
+    .wooden-plank-icon {
+        flex-basis: 19px;
+        font-size: 1rem;
+    }
+
+    .ninja-layout {
+        padding: 20px 12px 26px;
+    }
+
+    .ninja-center {
+        padding: 8px 0;
+    }
+
+    .ninja-eyebrow {
+        margin-bottom: 10px;
+        font-size: 0.6rem;
+        letter-spacing: 0.5px;
+    }
+
+    .ninja-heading {
+        font-size: clamp(2rem, 9vw, 2.8rem);
+        letter-spacing: -1px;
+    }
+
+    .ninja-subtitle {
+        margin-top: 8px;
+        font-size: 0.78rem;
+    }
+
+    .ninja-mode-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        max-width: 320px;
+        gap: 18px 14px;
+        margin-top: 22px;
+    }
+
+    .ninja-card-ring {
+        width: min(100%, 104px);
+        border-width: 4px;
+    }
+
+    .ninja-card-fruit {
+        font-size: 2.2rem;
+    }
+
+    .ninja-card-name {
+        font-size: 0.65rem;
+    }
+
+    .ninja-mode-description {
+        margin-top: 16px;
+        font-size: 0.78rem;
+    }
+
+    .ninja-play-button {
+        width: min(100%, 260px);
+        min-height: 46px;
+        margin-top: 16px;
+    }
+
+    .ninja-tagline {
+        max-width: 300px;
+        margin-top: 18px;
+        font-size: 0.58rem;
+        letter-spacing: 0.5px;
+    }
+
+    .game-toolbar {
+        gap: 8px;
+    }
+
+    .back-button {
+        min-height: 40px;
+        padding: 8px 10px;
+        font-size: 0.78rem;
+    }
+
+    .mode-badge,
+    .score-placeholder {
+        font-size: 0.68rem;
+    }
+
+    .app-footer {
+        padding: 12px 8px;
+        font-size: 0.58rem;
+    }
+}
+
+/* Extra-narrow phones */
+@media (max-width: 360px) {
+    .brand {
+        font-size: 13px;
+    }
+
+    .topbar-label {
+        font-size: 7px;
+    }
+
+    .wooden-plank {
+        gap: 4px;
+        padding-inline: 5px;
+        font-size: 0.58rem;
+    }
+
+    .wooden-plank-icon {
+        flex-basis: 17px;
+        font-size: 0.9rem;
+    }
+
+    .ninja-heading {
+        font-size: 1.9rem;
+    }
+
+    .ninja-mode-row {
+        gap: 16px 8px;
+    }
+
+    .ninja-card-ring {
+        max-width: 94px;
+    }
+
+    .ninja-card-fruit {
+        font-size: 1.9rem;
+    }
+}
+
+/* Landscape phones: use the available width without forcing a tall screen. */
+@media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+    .ninja-screen {
+        min-height: auto;
+    }
+
+    .wooden-sidebar {
+        position: relative;
+        top: auto;
+        left: auto;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 6px;
+        width: calc(100% - 20px);
+        max-width: none;
+        margin: 12px auto 0;
+        transform: none;
+    }
+
+    .wooden-plank {
+        min-height: 42px;
+        gap: 4px;
+        padding: 6px 4px;
+        font-size: 0.6rem;
+    }
+
+    .wooden-plank-icon {
+        flex-basis: 16px;
+        font-size: 0.85rem;
+    }
+
+    .ninja-layout {
+        min-height: auto;
+        padding: 18px 12px 24px;
+    }
+
+    .ninja-center {
+        padding: 8px 0;
+    }
+
+    .ninja-heading {
+        font-size: clamp(2rem, 5vw, 3rem);
+    }
+
+    .ninja-mode-row {
+        max-width: 440px;
+        margin-top: 14px;
+    }
+
+    .ninja-card-ring {
+        max-width: 72px;
+    }
+
+    .ninja-card-fruit {
+        font-size: 1.8rem;
+    }
+
+    .ninja-tagline {
+        margin-top: 12px;
+    }
+}
+
+/* Honor reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
