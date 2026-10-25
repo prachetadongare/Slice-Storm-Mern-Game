@@ -287,7 +287,6 @@ video {
     min-height: clamp(54px, 6vw, 68px);
     padding: 12px clamp(12px, 1.7vw, 22px) 12px 24px;
     color: #fff5df;
-
     background:
         repeating-linear-gradient(0deg,
             transparent 0,
@@ -299,7 +298,6 @@ video {
             #b77742 25%,
             #82451f 65%,
             #bd8048 100%);
-
     border: 2px solid #f4cf8a;
     border-radius: 11px;
     box-shadow:
@@ -307,12 +305,10 @@ video {
         inset 0 -4px 6px #35170666,
         0 5px 0 #4a2414,
         0 9px 18px #0006;
-
     font-size: clamp(0.72rem, 1.05vw, 0.95rem);
     font-weight: 900;
     letter-spacing: clamp(0px, 0.12vw, 1.2px);
     text-shadow: 0 2px 4px #321607;
-
     transition: filter 180ms ease, transform 180ms ease;
 }
 
@@ -372,12 +368,8 @@ video {
     min-width: 0;
     min-height: 650px;
 
-    /*
-    Reserve room for the left navigation and
-    keep the title and fruit cards in the center.
-  */
-    padding:
-        82px clamp(18px, 3vw, 40px) 32px clamp(220px, 24vw, 320px);
+    /* Reserve room for the sidebar on wide screens only. */
+    padding: 82px 32px 32px clamp(280px, 25vw, 340px);
 }
 
 .ninja-center {
@@ -567,7 +559,7 @@ video {
     align-items: center;
     justify-content: center;
     gap: 9px;
-    width: min(100%, 220px);
+    width: min(100%, 260px);
     min-height: 48px;
     margin-top: 18px;
     padding: 12px 22px;
@@ -698,72 +690,175 @@ video {
 }
 
 /* ==========================================
-   SMALL DESKTOPS AND TABLETS
+   MID-SIZE WINDOWS AND HALF-SCREEN DESKTOPS
    ========================================== */
 
-@media (max-width: 1050px) and (min-width: 701px) {
+@media (max-width: 1250px) {
     .ninja-screen {
-        min-height: 620px;
+        min-height: 650px;
     }
 
+    /*
+       Stop reserving a large left-side column.
+       Sidebar becomes a horizontal row above the title.
+    */
     .wooden-sidebar {
-        left: 14px;
-        width: 165px;
-        gap: 12px;
+        position: relative;
+        top: auto;
+        left: auto;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        width: calc(100% - 32px);
+        max-width: 900px;
+        margin: 72px auto 0;
+        transform: none;
     }
 
     .wooden-plank {
-        min-height: 58px;
-        gap: 8px;
-        padding: 10px 10px 10px 18px;
-        font-size: 0.7rem;
+        justify-content: center;
+        gap: 7px;
+        min-height: 50px;
+        padding: 9px 8px;
+        font-size: clamp(0.62rem, 1vw, 0.82rem);
         letter-spacing: 0;
     }
 
     .wooden-plank-icon {
-        flex-basis: 22px;
-        font-size: 1.1rem;
+        flex: 0 0 auto;
+        font-size: 1.05rem;
+    }
+
+    .wooden-plank::before {
+        left: 4px;
+        width: 4px;
+        height: 4px;
+    }
+
+    .wooden-plank::after {
+        right: 4px;
+        width: 4px;
+        height: 4px;
     }
 
     .ninja-layout {
-        min-height: 620px;
-        padding: 78px 16px 28px 190px;
+        min-height: 0;
+        padding: 24px 24px 34px;
+    }
+
+    .ninja-center {
+        max-width: 760px;
+    }
+
+    .ninja-heading {
+        font-size: clamp(2.6rem, 5.4vw, 4.4rem);
+    }
+
+    .ninja-mode-row {
+        max-width: 600px;
+        gap: clamp(10px, 2vw, 20px);
+    }
+
+    .ninja-card-ring {
+        max-width: 112px;
+    }
+}
+
+/* ==========================================
+   TABLETS AND NARROW WINDOWS
+   ========================================== */
+
+@media (max-width: 850px) {
+    .topbar {
+        min-height: 58px;
+    }
+
+    .ninja-screen {
+        min-height: 0;
+    }
+
+    .game-topbar {
+        top: 10px;
+        right: 12px;
+    }
+
+    .wooden-sidebar {
+        width: calc(100% - 24px);
+        gap: 8px;
+        margin-top: 64px;
+    }
+
+    .wooden-plank {
+        min-height: 46px;
+        gap: 5px;
+        padding: 8px 5px;
+        font-size: clamp(0.58rem, 1.2vw, 0.75rem);
+    }
+
+    .wooden-plank-icon {
+        font-size: 0.95rem;
+    }
+
+    .ninja-layout {
+        padding: 28px 20px;
     }
 
     .ninja-center {
         max-width: 620px;
+        padding: 12px 0;
+    }
+
+    .ninja-heading {
+        font-size: clamp(2.4rem, 6.5vw, 3.8rem);
     }
 
     .ninja-mode-row {
-        gap: 9px;
+        gap: 12px;
+        margin-top: 24px;
     }
 
     .ninja-card-ring {
         max-width: 100px;
     }
+
+    .ninja-card-fruit {
+        font-size: clamp(1.8rem, 4vw, 2.6rem);
+    }
+
+    .ninja-tagline {
+        margin-top: 18px;
+    }
 }
 
 /* ==========================================
-   PHONES AND NARROW TABLETS
+   PHONES
    ========================================== */
 
-@media (max-width: 700px) {
+@media (max-width: 600px) {
     .topbar {
         min-height: 56px;
         padding: 12px 14px;
     }
 
+    .brand {
+        font-size: clamp(14px, 4vw, 18px);
+    }
+
+    .topbar-label {
+        max-width: 42%;
+        font-size: 8px;
+        letter-spacing: 0.5px;
+    }
+
     .ninja-screen {
-        min-height: auto;
+        min-height: 0;
         overflow: visible;
     }
 
-    /* Put resources in the top row without overlapping the title. */
     .game-topbar {
         position: relative;
         top: auto;
         right: auto;
-        z-index: 40;
         width: 100%;
         max-width: none;
         padding: 12px 12px 0;
@@ -784,87 +879,90 @@ video {
         padding: 7px 10px;
     }
 
-    /* Navigation becomes two columns above the title. */
+    /* Two columns for navigation on phones. */
     .wooden-sidebar {
-        position: relative;
-        top: auto;
-        left: auto;
-        display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
         width: calc(100% - 24px);
-        max-width: 520px;
-        margin: 14px auto 0;
-        transform: none;
+        max-width: 440px;
+        gap: 9px;
+        margin: 12px auto 0;
     }
 
     .wooden-plank {
         justify-content: center;
         gap: 7px;
-        min-height: 52px;
-        padding: 9px 8px;
-        font-size: clamp(0.65rem, 2.3vw, 0.8rem);
-        letter-spacing: 0;
+        min-height: 48px;
+        padding: 8px 6px;
+        font-size: clamp(0.62rem, 2.5vw, 0.78rem);
     }
 
     .wooden-plank-icon {
-        flex-basis: 22px;
-        font-size: 1.15rem;
-    }
-
-    .wooden-plank::before {
-        left: 4px;
-        width: 4px;
-        height: 4px;
-    }
-
-    .wooden-plank::after {
-        right: 4px;
-        width: 4px;
-        height: 4px;
+        font-size: 1rem;
     }
 
     .ninja-layout {
-        display: flex;
-        min-height: auto;
-        padding: 20px 16px 30px;
+        min-height: 0;
+        padding: 26px 14px 30px;
     }
 
     .ninja-center {
-        width: 100%;
-        max-width: 540px;
-        padding: 12px 0;
+        max-width: 500px;
+        padding: 8px 0;
+    }
+
+    .ninja-eyebrow {
+        margin-bottom: 10px;
+        font-size: clamp(0.58rem, 2.3vw, 0.75rem);
+        letter-spacing: 0.5px;
     }
 
     .ninja-heading {
-        font-size: clamp(2.2rem, 8vw, 3.6rem);
+        font-size: clamp(2rem, 8vw, 3.3rem);
+        letter-spacing: -1px;
     }
 
     .ninja-subtitle {
-        max-width: 420px;
+        margin-top: 8px;
+        font-size: 0.8rem;
     }
 
+    /* Keep all four modes in a compact, non-overlapping row. */
     .ninja-mode-row {
         grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 8px;
-        margin-top: 24px;
+        gap: 6px;
+        margin-top: 22px;
     }
 
     .ninja-card-ring {
-        max-width: 100px;
+        max-width: 82px;
+        border-width: 4px;
     }
 
     .ninja-card-fruit {
-        font-size: clamp(1.7rem, 5vw, 2.5rem);
+        font-size: clamp(1.3rem, 6vw, 2.1rem);
     }
 
     .ninja-card-name {
-        font-size: clamp(0.5rem, 1.8vw, 0.7rem);
+        font-size: clamp(0.46rem, 1.8vw, 0.65rem);
         letter-spacing: 0;
     }
 
+    .ninja-mode-description {
+        margin-top: 14px;
+        font-size: 0.76rem;
+    }
+
+    .ninja-play-button {
+        width: min(100%, 260px);
+        min-height: 46px;
+        margin-top: 16px;
+    }
+
     .ninja-tagline {
-        margin-top: 20px;
+        max-width: 300px;
+        margin-top: 18px;
+        font-size: 0.58rem;
+        letter-spacing: 0.5px;
     }
 
     .game-screen {
@@ -880,15 +978,15 @@ video {
    SMALL PHONES
    ========================================== */
 
-@media (max-width: 480px) {
+@media (max-width: 400px) {
     .topbar {
-        gap: 8px;
-        padding: 10px 12px;
+        gap: 6px;
+        padding: 10px;
     }
 
     .brand {
-        font-size: 15px;
-        letter-spacing: 0.5px;
+        font-size: 13px;
+        letter-spacing: 0;
     }
 
     .brand-icon {
@@ -896,22 +994,16 @@ video {
     }
 
     .topbar-label {
-        max-width: 42%;
-        font-size: 8px;
-        letter-spacing: 0.5px;
+        font-size: 7px;
     }
 
-    .ninja-screen {
-        min-height: auto;
-    }
-
-    .game-topbar {
-        padding: 10px 10px 0;
+    .game-resource-bar {
+        gap: 5px;
     }
 
     .resource-counter {
         gap: 4px;
-        padding: 6px 8px;
+        padding: 6px 7px;
     }
 
     .resource-counter span {
@@ -923,88 +1015,63 @@ video {
     }
 
     .menu-toggle {
-        padding: 7px 9px;
-        font-size: 0.65rem;
+        padding: 7px 8px;
+        font-size: 0.62rem;
     }
 
     .wooden-sidebar {
         width: calc(100% - 20px);
         gap: 8px;
-        margin-top: 12px;
     }
 
     .wooden-plank {
         gap: 5px;
-        min-height: 48px;
-        padding: 8px 6px;
-        font-size: clamp(0.6rem, 2.6vw, 0.72rem);
+        min-height: 44px;
+        padding: 7px 5px;
+        font-size: 0.62rem;
     }
 
     .wooden-plank-icon {
-        flex-basis: 19px;
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 
     .ninja-layout {
-        padding: 20px 12px 26px;
-    }
-
-    .ninja-center {
-        padding: 8px 0;
-    }
-
-    .ninja-eyebrow {
-        margin-bottom: 10px;
-        font-size: 0.6rem;
-        letter-spacing: 0.5px;
+        padding: 22px 10px 26px;
     }
 
     .ninja-heading {
-        font-size: clamp(2rem, 9vw, 2.8rem);
-        letter-spacing: -1px;
+        font-size: clamp(1.8rem, 8.5vw, 2.5rem);
     }
 
     .ninja-subtitle {
-        margin-top: 8px;
-        font-size: 0.78rem;
+        font-size: 0.74rem;
     }
 
     .ninja-mode-row {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        max-width: 320px;
-        gap: 18px 14px;
-        margin-top: 22px;
+        gap: 5px;
+        margin-top: 20px;
     }
 
     .ninja-card-ring {
-        width: min(100%, 104px);
-        border-width: 4px;
+        max-width: 68px;
+        border-width: 3px;
     }
 
     .ninja-card-fruit {
-        font-size: 2.2rem;
+        font-size: 1.65rem;
     }
 
     .ninja-card-name {
-        font-size: 0.65rem;
+        font-size: 0.48rem;
     }
 
     .ninja-mode-description {
-        margin-top: 16px;
-        font-size: 0.78rem;
+        font-size: 0.72rem;
     }
 
     .ninja-play-button {
-        width: min(100%, 260px);
-        min-height: 46px;
-        margin-top: 16px;
-    }
-
-    .ninja-tagline {
-        max-width: 300px;
-        margin-top: 18px;
-        font-size: 0.58rem;
-        letter-spacing: 0.5px;
+        font-size: 0.8rem;
+        letter-spacing: 0.8px;
     }
 
     .game-toolbar {
@@ -1028,78 +1095,60 @@ video {
     }
 }
 
-/* Extra-narrow phones */
-@media (max-width: 360px) {
-    .brand {
-        font-size: 13px;
-    }
+/* ==========================================
+   VERY NARROW PHONES
+   ========================================== */
 
-    .topbar-label {
-        font-size: 7px;
-    }
-
-    .wooden-plank {
-        gap: 4px;
-        padding-inline: 5px;
-        font-size: 0.58rem;
-    }
-
-    .wooden-plank-icon {
-        flex-basis: 17px;
-        font-size: 0.9rem;
-    }
-
-    .ninja-heading {
-        font-size: 1.9rem;
-    }
-
+@media (max-width: 340px) {
     .ninja-mode-row {
-        gap: 16px 8px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        max-width: 250px;
+        gap: 16px 12px;
     }
 
     .ninja-card-ring {
-        max-width: 94px;
+        max-width: 88px;
     }
 
     .ninja-card-fruit {
-        font-size: 1.9rem;
-    }
-}
-
-/* Landscape phones: use the available width without forcing a tall screen. */
-@media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
-    .ninja-screen {
-        min-height: auto;
+        font-size: 2rem;
     }
 
-    .wooden-sidebar {
-        position: relative;
-        top: auto;
-        left: auto;
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 6px;
-        width: calc(100% - 20px);
-        max-width: none;
-        margin: 12px auto 0;
-        transform: none;
+    .ninja-card-name {
+        font-size: 0.62rem;
     }
 
     .wooden-plank {
-        min-height: 42px;
+        font-size: 0.57rem;
+    }
+}
+
+/* ==========================================
+   LANDSCAPE PHONES
+   ========================================== */
+
+@media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+    .ninja-screen {
+        min-height: 0;
+    }
+
+    .wooden-sidebar {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        width: calc(100% - 20px);
+        max-width: 800px;
+        margin: 58px auto 0;
+    }
+
+    .wooden-plank {
+        min-height: 38px;
         gap: 4px;
-        padding: 6px 4px;
+        padding: 5px 4px;
         font-size: 0.6rem;
     }
 
-    .wooden-plank-icon {
-        flex-basis: 16px;
-        font-size: 0.85rem;
-    }
-
     .ninja-layout {
-        min-height: auto;
-        padding: 18px 12px 24px;
+        min-height: 0;
+        padding: 16px 12px 22px;
     }
 
     .ninja-center {
@@ -1116,11 +1165,11 @@ video {
     }
 
     .ninja-card-ring {
-        max-width: 72px;
+        max-width: 68px;
     }
 
     .ninja-card-fruit {
-        font-size: 1.8rem;
+        font-size: 1.7rem;
     }
 
     .ninja-tagline {
@@ -1128,7 +1177,10 @@ video {
     }
 }
 
-/* Honor reduced-motion preferences */
+/* ==========================================
+   REDUCED MOTION
+   ========================================== */
+
 @media (prefers-reduced-motion: reduce) {
 
     *,

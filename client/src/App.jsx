@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import GameMenu from "./components/GameMenu";
+import AuthPage from "./components/AuthPage";
 import GameCanvas from "./components/GameCanvas";
 import SplashScreen from "./components/SplashScreen";
 import "./styles/global.css";
@@ -12,6 +13,8 @@ function App() {
   const [mode, setMode] = useState("classic");
   const [soundOn, setSoundOn] = useState(true);
   const [score, setScore] = useState(0);
+  const [showAuth, setShowAuth] = useState(false);
+  const [authenticatedUser, setAuthenticatedUser] = useState(null);
 
   const audioContextRef = useRef(null);
   const pointerRef = useRef(null);
@@ -174,6 +177,12 @@ function App() {
   }, []);
 
   function handleStartGame() {
+    setShowAuth(true);
+  }
+
+  function handleAuthenticated(user) {
+    setAuthenticatedUser(user);
+    setShowAuth(false);
     setScore(0);
     setGameStarted(true);
   }
@@ -219,11 +228,16 @@ function App() {
           <GameCanvas onScoreChange={setScore} soundOn={soundOn} />
 
           <p className="game-hint">
-            {mode === "festival"
-              ? "Festival mode selected! Get ready for the challenge."
-              : "Your game arena is ready. Fruit slicing comes next!"}
+            {authenticatedUser
+              ? `Ready to play, ${authenticatedUser.username}!`
+              : "Your game arena is ready."}
           </p>
         </section>
+      ) : showAuth ? (
+        <AuthPage
+          onBack={() => setShowAuth(false)}
+          onAuthenticated={handleAuthenticated}
+        />
       ) : (
         <GameMenu
           onStart={handleStartGame}

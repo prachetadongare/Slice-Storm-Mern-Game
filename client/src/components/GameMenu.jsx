@@ -106,7 +106,7 @@ function GameMenu({ mode, setMode, soundOn, setSoundOn, onStart }) {
           </p>
 
           <h1 className="ninja-heading">
-            FRUIT <span>NINJA</span>
+            SLICE <span>STORM</span>
           </h1>
 
           <p className="ninja-subtitle">

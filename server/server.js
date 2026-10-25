@@ -9,12 +9,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/api/health", (req, res) => {
+app.get("/api", (req, res) => {
   res.json({
     success: true,
     message: "Slice Storm API is running",
   });
 });
+
+app.use("/api/auth", require("./routes/authRoutes"));
 
 async function startServer() {
   await connectDB();
