@@ -1,7 +1,6 @@
 import { useState } from "react";
 
-function GameMenu({ mode, setMode, soundOn, setSoundOn, onStart }) {
-  const [menuOpen, setMenuOpen] = useState(false);
+function GameMenu({ mode, setMode, onStart }) {
   const [notice, setNotice] = useState("");
 
   const modes = [
@@ -49,7 +48,15 @@ function GameMenu({ mode, setMode, soundOn, setSoundOn, onStart }) {
   return (
     <section className="ninja-screen">
       {/* Separate left-side wooden navigation */}
+
+      {/* Game navigation */}
       <aside className="wooden-sidebar" aria-label="Game navigation">
+        <h2 className="mobile-menu-heading">
+          <span aria-hidden="true">✦</span>
+          YOUR ARENA
+          <span aria-hidden="true">✦</span>
+        </h2>
+
         {navigationItems.map((item) => (
           <button
             key={item.label}
@@ -64,38 +71,6 @@ function GameMenu({ mode, setMode, soundOn, setSoundOn, onStart }) {
           </button>
         ))}
       </aside>
-
-      {/* Right-side resources and menu */}
-      <header className="game-topbar">
-        <div className="game-resource-bar">
-          <div className="resource-counter">
-            <span aria-hidden="true">💎</span>
-            <strong>0</strong>
-          </div>
-
-          <div className="resource-counter">
-            <span aria-hidden="true">⭐</span>
-            <strong>0</strong>
-          </div>
-
-          <button
-            className="menu-toggle"
-            type="button"
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((open) => !open)}
-          >
-            ☰ MENU
-          </button>
-
-          {menuOpen && (
-            <div className="menu-dropdown">
-              <button type="button" onClick={() => setSoundOn(!soundOn)}>
-                {soundOn ? "🔊 Sound On" : "🔇 Sound Off"}
-              </button>
-            </div>
-          )}
-        </div>
-      </header>
 
       {/* Centered game title and mode selection */}
       <main className="ninja-layout">

@@ -1,41 +1,82 @@
 import { useState, useRef, useEffect } from "react";
 import GameMenu from "./components/GameMenu";
-import AuthPage from "./components/AuthPage";
 import GameCanvas from "./components/GameCanvas";
 import SplashScreen from "./components/SplashScreen";
+import AuthPage from "./components/AuthPage";
+import GameHome from "./components/GameHome";
 import "./styles/global.css";
 
+function getSavedUser() {
+  try {
+    return JSON.parse(localStorage.getItem("sliceStormUser")) || null;
+  } catch {
+    return null;
+  }
+}
+
+function getInitialPage() {
+  const token = localStorage.getItem("sliceStormToken");
+  const savedUser = getSavedUser();
+  const savedPage = localStorage.getItem("sliceStormPage");
+
+  if (token && savedUser) {
+    if (["home", "game", "auth"].includes(savedPage)) {
+      return savedPage;
+    }
+    return "home";
+  }
+
+  // Never restore a protected page without a saved login.
+  return savedPage === "auth" ? "auth" : "menu";
+}
+
 function App() {
-  const [loading, setLoading] = useState(true);
+  // Show the splash screen only on the first visit to this app.
+  const [loading, setLoading] = useState(
+    () => localStorage.getItem("sliceStormHasLoaded") !== "true",
+  );
   const [progress, setProgress] = useState(0);
 
-  const [gameStarted, setGameStarted] = useState(false);
-  const [mode, setMode] = useState("classic");
+  const [page, setPage] = useState(getInitialPage);
+  const [mode, setMode] = useState(
+    () => localStorage.getItem("sliceStormMode") || "classic",
+  );
   const [soundOn, setSoundOn] = useState(true);
   const [score, setScore] = useState(0);
-  const [showAuth, setShowAuth] = useState(false);
-  const [authenticatedUser, setAuthenticatedUser] = useState(null);
+  const [user, setUser] = useState(getSavedUser);
 
   const audioContextRef = useRef(null);
   const pointerRef = useRef(null);
   const lastSoundTimeRef = useRef(0);
 
-  // Temporary loading animation.
+  // Save the current page whenever navigation changes.
   useEffect(() => {
+    localStorage.setItem("sliceStormPage", page);
+  }, [page]);
+
+  // Save the selected game mode.
+  useEffect(() => {
+    localStorage.setItem("sliceStormMode", mode);
+  }, [mode]);
+
+  // Splash screen progress.
+  useEffect(() => {
+    if (!loading) return;
+
     const startTime = performance.now();
     const loadingDuration = 3000;
     let animationFrame;
 
     function updateProgress(now) {
-      const elapsed = now - startTime;
-      const nextProgress = Math.min(
+      const next = Math.min(
         100,
-        Math.floor((elapsed / loadingDuration) * 100),
+        Math.floor(((now - startTime) / loadingDuration) * 100),
       );
 
-      setProgress(nextProgress);
+      setProgress(next);
 
-      if (nextProgress >= 100) {
+      if (next >= 100) {
+        localStorage.setItem("sliceStormHasLoaded", "true");
         setLoading(false);
       } else {
         animationFrame = requestAnimationFrame(updateProgress);
@@ -45,9 +86,9 @@ function App() {
     animationFrame = requestAnimationFrame(updateProgress);
 
     return () => cancelAnimationFrame(animationFrame);
-  }, []);
+  }, [loading]);
 
-  // Play slicing sound only while a pointer is being dragged.
+  // App-wide swipe sound.
   useEffect(() => {
     function handlePointerDown(event) {
       pointerRef.current = {
@@ -59,7 +100,6 @@ function App() {
         hasMoved: false,
       };
 
-      // Unlock audio during the user's direct gesture, but play no sound.
       const AudioContextClass =
         window.AudioContext || window.webkitAudioContext;
 
@@ -73,7 +113,7 @@ function App() {
             audioContextRef.current.resume().catch(() => {});
           }
         } catch (error) {
-          console.error("Could not initialize audio:", error);
+          console.error("Audio initialization failed:", error);
         }
       }
     }
@@ -81,9 +121,7 @@ function App() {
     function handlePointerMove(event) {
       const pointer = pointerRef.current;
 
-      if (!pointer || pointer.id !== event.pointerId || !soundOn) {
-        return;
-      }
+      if (!pointer || pointer.id !== event.pointerId || !soundOn) return;
 
       const dx = event.clientX - pointer.lastX;
       const dy = event.clientY - pointer.lastY;
@@ -107,8 +145,8 @@ function App() {
       if (!audio || audio.state !== "running") return;
 
       const now = audio.currentTime;
-      if (now - lastSoundTimeRef.current < 0.065) return;
 
+      if (now - lastSoundTimeRef.current < 0.065) return;
       lastSoundTimeRef.current = now;
 
       try {
@@ -134,7 +172,7 @@ function App() {
         oscillator.start(now);
         oscillator.stop(now + 0.075);
       } catch (error) {
-        console.error("Slicing sound failed:", error);
+        console.error("Swipe sound failed:", error);
       }
     }
 
@@ -148,7 +186,7 @@ function App() {
       }
     }
 
-    function handleWindowBlur() {
+    function handleBlur() {
       pointerRef.current = null;
     }
 
@@ -156,14 +194,14 @@ function App() {
     window.addEventListener("pointermove", handlePointerMove);
     window.addEventListener("pointerup", handlePointerUp);
     window.addEventListener("pointercancel", handlePointerUp);
-    window.addEventListener("blur", handleWindowBlur);
+    window.addEventListener("blur", handleBlur);
 
     return () => {
       window.removeEventListener("pointerdown", handlePointerDown);
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerup", handlePointerUp);
       window.removeEventListener("pointercancel", handlePointerUp);
-      window.removeEventListener("blur", handleWindowBlur);
+      window.removeEventListener("blur", handleBlur);
     };
   }, [soundOn]);
 
@@ -176,22 +214,29 @@ function App() {
     };
   }, []);
 
-  function handleStartGame() {
-    setShowAuth(true);
+  function handleAuthenticated(authenticatedUser) {
+    // AuthPage saves the token and user before calling this function.
+    setUser(authenticatedUser);
+    setPage("home");
   }
 
-  function handleAuthenticated(user) {
-    setAuthenticatedUser(user);
-    setShowAuth(false);
+  function handleLogout() {
+    // Clear saved authentication and user-specific navigation.
+    localStorage.removeItem("sliceStormToken");
+    localStorage.removeItem("sliceStormUser");
+    localStorage.removeItem("sliceStormPage");
+
+    setUser(null);
     setScore(0);
-    setGameStarted(true);
+    setPage("auth");
   }
 
-  function handleBackToMenu() {
-    setGameStarted(false);
+  function handlePlayMode(selectedMode) {
+    setMode(selectedMode);
+    setScore(0);
+    setPage("game");
   }
 
-  // The splash screen appears before the menu or gameplay.
   if (loading) {
     return <SplashScreen progress={progress} />;
   }
@@ -199,7 +244,15 @@ function App() {
   return (
     <main className="app">
       <header className="topbar">
-        <a className="brand" href="/" aria-label="Slice Storm home">
+        <a
+          className="brand"
+          href="/"
+          aria-label="Slice Storm home"
+          onClick={(event) => {
+            event.preventDefault();
+            setPage(user ? "home" : "menu");
+          }}
+        >
           <span className="brand-icon">✦</span>
           SLICE STORM
         </a>
@@ -207,15 +260,36 @@ function App() {
         <span className="topbar-label">FRUIT SLICING ARCADE</span>
       </header>
 
-      {gameStarted ? (
+      {page === "menu" && (
+        <GameMenu
+          onStart={() => setPage("auth")}
+          mode={mode}
+          setMode={setMode}
+          soundOn={soundOn}
+          setSoundOn={setSoundOn}
+        />
+      )}
+
+      {page === "auth" && (
+        <AuthPage
+          onAuthenticated={handleAuthenticated}
+          onBack={() => setPage(user ? "home" : "menu")}
+        />
+      )}
+
+      {page === "home" && (
+        <GameHome user={user} onPlay={handlePlayMode} onLogout={handleLogout} />
+      )}
+
+      {page === "game" && (
         <section className="game-screen">
           <div className="game-toolbar">
             <button
               type="button"
               className="back-button"
-              onClick={handleBackToMenu}
+              onClick={() => setPage("home")}
             >
-              ← Main Menu
+              ← Game Home
             </button>
 
             <span className="mode-badge">{mode.toUpperCase()} MODE</span>
@@ -228,24 +302,15 @@ function App() {
           <GameCanvas onScoreChange={setScore} soundOn={soundOn} />
 
           <p className="game-hint">
-            {authenticatedUser
-              ? `Ready to play, ${authenticatedUser.username}!`
-              : "Your game arena is ready."}
+            {mode === "zen"
+              ? "Relax and slice at your own pace."
+              : mode === "arcade"
+                ? "Race against the clock for a high score."
+                : mode === "theme"
+                  ? "Enjoy your themed fruit-slicing adventure."
+                  : "Slice the fruit. Avoid the bombs."}
           </p>
         </section>
-      ) : showAuth ? (
-        <AuthPage
-          onBack={() => setShowAuth(false)}
-          onAuthenticated={handleAuthenticated}
-        />
-      ) : (
-        <GameMenu
-          onStart={handleStartGame}
-          mode={mode}
-          setMode={setMode}
-          soundOn={soundOn}
-          setSoundOn={setSoundOn}
-        />
       )}
 
       <footer className="app-footer">

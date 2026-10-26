@@ -28,7 +28,9 @@ function AuthPage({ onBack, onAuthenticated }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(
-          isRegister ? { username, email, password } : { email, password },
+          isRegister
+            ? { username: username.trim(), email: email.trim(), password }
+            : { email: email.trim(), password },
         ),
       });
 
@@ -38,13 +40,21 @@ function AuthPage({ onBack, onAuthenticated }) {
         throw new Error(data.message || "Authentication failed.");
       }
 
-      // Save the token and basic user information for this session.
-      sessionStorage.setItem("sliceStormToken", data.token);
-      sessionStorage.setItem("sliceStormUser", JSON.stringify(data.user));
+      if (!data.token || !data.user) {
+        throw new Error("The server did not return a valid login session.");
+      }
+
+      // Persist authentication across browser refreshes.
+      localStorage.setItem("sliceStormToken", data.token);
+      localStorage.setItem("sliceStormUser", JSON.stringify(data.user));
+
+      // Save the destination page as well.
+      localStorage.setItem("sliceStormPage", "home");
 
       onAuthenticated(data.user);
     } catch (err) {
       setError(true);
+
       setMessage(
         err.message === "Failed to fetch"
           ? "Cannot reach the server. Check that your backend is running."
@@ -126,7 +136,9 @@ function AuthPage({ onBack, onAuthenticated }) {
 
           {message && (
             <p
-              className={`auth-message ${error ? "auth-error" : "auth-success"}`}
+              className={`auth-message ${
+                error ? "auth-error" : "auth-success"
+              }`}
               role="status"
             >
               {message}
