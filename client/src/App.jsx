@@ -1,9 +1,10 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import GameMenu from "./components/GameMenu";
 import GameCanvas from "./components/GameCanvas";
 import SplashScreen from "./components/SplashScreen";
 import AuthPage from "./components/AuthPage";
 import GameHome from "./components/GameHome";
+import ModeLobby from "./components/ModeLobby";
 import "./styles/global.css";
 
 function getSavedUser() {
@@ -20,46 +21,43 @@ function getInitialPage() {
   const savedPage = localStorage.getItem("sliceStormPage");
 
   if (token && savedUser) {
-    if (["home", "game", "auth"].includes(savedPage)) {
+    if (["home", "lobby", "game"].includes(savedPage)) {
       return savedPage;
     }
+
     return "home";
   }
 
-  // Never restore a protected page without a saved login.
   return savedPage === "auth" ? "auth" : "menu";
 }
 
 function App() {
-  // Show the splash screen only on the first visit to this app.
   const [loading, setLoading] = useState(
     () => localStorage.getItem("sliceStormHasLoaded") !== "true",
   );
-  const [progress, setProgress] = useState(0);
 
+  const [progress, setProgress] = useState(0);
   const [page, setPage] = useState(getInitialPage);
+
   const [mode, setMode] = useState(
     () => localStorage.getItem("sliceStormMode") || "classic",
   );
+
   const [soundOn, setSoundOn] = useState(true);
   const [score, setScore] = useState(0);
   const [user, setUser] = useState(getSavedUser);
 
-  const audioContextRef = useRef(null);
-  const pointerRef = useRef(null);
-  const lastSoundTimeRef = useRef(0);
-
-  // Save the current page whenever navigation changes.
+  // Persist the current page.
   useEffect(() => {
     localStorage.setItem("sliceStormPage", page);
   }, [page]);
 
-  // Save the selected game mode.
+  // Persist the selected game mode.
   useEffect(() => {
     localStorage.setItem("sliceStormMode", mode);
   }, [mode]);
 
-  // Splash screen progress.
+  // Show the splash screen only on the first visit.
   useEffect(() => {
     if (!loading) return;
 
@@ -88,140 +86,12 @@ function App() {
     return () => cancelAnimationFrame(animationFrame);
   }, [loading]);
 
-  // App-wide swipe sound.
-  useEffect(() => {
-    function handlePointerDown(event) {
-      pointerRef.current = {
-        id: event.pointerId,
-        x: event.clientX,
-        y: event.clientY,
-        lastX: event.clientX,
-        lastY: event.clientY,
-        hasMoved: false,
-      };
-
-      const AudioContextClass =
-        window.AudioContext || window.webkitAudioContext;
-
-      if (soundOn && AudioContextClass) {
-        try {
-          if (!audioContextRef.current) {
-            audioContextRef.current = new AudioContextClass();
-          }
-
-          if (audioContextRef.current.state === "suspended") {
-            audioContextRef.current.resume().catch(() => {});
-          }
-        } catch (error) {
-          console.error("Audio initialization failed:", error);
-        }
-      }
-    }
-
-    function handlePointerMove(event) {
-      const pointer = pointerRef.current;
-
-      if (!pointer || pointer.id !== event.pointerId || !soundOn) return;
-
-      const dx = event.clientX - pointer.lastX;
-      const dy = event.clientY - pointer.lastY;
-
-      pointer.lastX = event.clientX;
-      pointer.lastY = event.clientY;
-
-      if (!pointer.hasMoved) {
-        if (
-          Math.hypot(event.clientX - pointer.x, event.clientY - pointer.y) < 6
-        ) {
-          return;
-        }
-
-        pointer.hasMoved = true;
-      }
-
-      if (dx === 0 && dy === 0) return;
-
-      const audio = audioContextRef.current;
-      if (!audio || audio.state !== "running") return;
-
-      const now = audio.currentTime;
-
-      if (now - lastSoundTimeRef.current < 0.065) return;
-      lastSoundTimeRef.current = now;
-
-      try {
-        const oscillator = audio.createOscillator();
-        const gain = audio.createGain();
-
-        oscillator.type = "sawtooth";
-        oscillator.frequency.setValueAtTime(1000, now);
-        oscillator.frequency.exponentialRampToValueAtTime(250, now + 0.065);
-
-        gain.gain.setValueAtTime(0.0001, now);
-        gain.gain.linearRampToValueAtTime(0.1, now + 0.006);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.07);
-
-        oscillator.connect(gain);
-        gain.connect(audio.destination);
-
-        oscillator.onended = () => {
-          oscillator.disconnect();
-          gain.disconnect();
-        };
-
-        oscillator.start(now);
-        oscillator.stop(now + 0.075);
-      } catch (error) {
-        console.error("Swipe sound failed:", error);
-      }
-    }
-
-    function handlePointerUp(event) {
-      if (
-        pointerRef.current &&
-        (event.pointerId === undefined ||
-          pointerRef.current.id === event.pointerId)
-      ) {
-        pointerRef.current = null;
-      }
-    }
-
-    function handleBlur() {
-      pointerRef.current = null;
-    }
-
-    window.addEventListener("pointerdown", handlePointerDown);
-    window.addEventListener("pointermove", handlePointerMove);
-    window.addEventListener("pointerup", handlePointerUp);
-    window.addEventListener("pointercancel", handlePointerUp);
-    window.addEventListener("blur", handleBlur);
-
-    return () => {
-      window.removeEventListener("pointerdown", handlePointerDown);
-      window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("pointerup", handlePointerUp);
-      window.removeEventListener("pointercancel", handlePointerUp);
-      window.removeEventListener("blur", handleBlur);
-    };
-  }, [soundOn]);
-
-  useEffect(() => {
-    return () => {
-      if (audioContextRef.current) {
-        audioContextRef.current.close().catch(() => {});
-        audioContextRef.current = null;
-      }
-    };
-  }, []);
-
   function handleAuthenticated(authenticatedUser) {
-    // AuthPage saves the token and user before calling this function.
     setUser(authenticatedUser);
     setPage("home");
   }
 
   function handleLogout() {
-    // Clear saved authentication and user-specific navigation.
     localStorage.removeItem("sliceStormToken");
     localStorage.removeItem("sliceStormUser");
     localStorage.removeItem("sliceStormPage");
@@ -231,8 +101,15 @@ function App() {
     setPage("auth");
   }
 
+  // Called after the user successfully slices a mode fruit.
   function handlePlayMode(selectedMode) {
     setMode(selectedMode);
+    setScore(0);
+    setPage("lobby");
+  }
+
+  // Called after the user slices the Play fruit in the lobby.
+  function handleStartGame() {
     setScore(0);
     setPage("game");
   }
@@ -278,7 +155,21 @@ function App() {
       )}
 
       {page === "home" && (
-        <GameHome user={user} onPlay={handlePlayMode} onLogout={handleLogout} />
+        <GameHome
+          user={user}
+          onPlay={handlePlayMode}
+          onLogout={handleLogout}
+          soundOn={soundOn}
+        />
+      )}
+
+      {page === "lobby" && (
+        <ModeLobby
+          mode={mode}
+          soundOn={soundOn}
+          onBack={() => setPage("home")}
+          onStartGame={handleStartGame}
+        />
       )}
 
       {page === "game" && (
@@ -287,9 +178,9 @@ function App() {
             <button
               type="button"
               className="back-button"
-              onClick={() => setPage("home")}
+              onClick={() => setPage("lobby")}
             >
-              ← Game Home
+              ← Mode Lobby
             </button>
 
             <span className="mode-badge">{mode.toUpperCase()} MODE</span>
@@ -299,7 +190,7 @@ function App() {
             </span>
           </div>
 
-          <GameCanvas onScoreChange={setScore} soundOn={soundOn} />
+          <GameCanvas onScoreChange={setScore} soundOn={soundOn} mode={mode} />
 
           <p className="game-hint">
             {mode === "zen"

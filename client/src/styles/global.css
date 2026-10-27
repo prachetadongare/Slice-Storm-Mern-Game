@@ -652,14 +652,9 @@ video {
     width: 100%;
     max-width: 100%;
     height: auto;
-    aspect-ratio: 800 / 450;
-    background: #17132b;
-    border: 2px solid #a98ae8;
-    border-radius: 14px;
-    box-shadow: 0 0 25px #7c3aed33;
     touch-action: none;
+    cursor: crosshair;
     user-select: none;
-    -webkit-user-select: none;
 }
 
 .game-hint {

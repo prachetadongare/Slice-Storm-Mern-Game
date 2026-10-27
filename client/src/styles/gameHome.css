@@ -404,6 +404,138 @@
     text-shadow: 0 2px 5px #0009;
 }
 
+
+/* Enable mouse and touch swiping on the game-home screen. */
+.game-home {
+    position: relative;
+    isolation: isolate;
+    touch-action: pan-y;
+}
+
+.home-mode {
+    position: relative;
+    cursor: crosshair;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.home-mode-ring {
+    position: relative;
+    overflow: visible;
+}
+
+.home-mode-fruit {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(3.2rem, 7vw, 5rem);
+    line-height: 1;
+    pointer-events: none;
+    filter: drop-shadow(0 5px 8px #0008);
+}
+
+.home-mode.is-slicing .home-mode-fruit {
+    animation: fruit-impact 420ms ease-out forwards;
+}
+
+.fruit-split {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+}
+
+.fruit-split span {
+    display: inline-block;
+    animation: fruit-half-left 420ms ease-out forwards;
+}
+
+.fruit-split span+span {
+    animation-name: fruit-half-right;
+}
+
+.home-slice-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    pointer-events: none;
+    overflow: visible;
+}
+
+.home-slice-overlay line {
+    stroke: #b8fbff;
+    stroke-width: 5;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 5px #51eaff) drop-shadow(0 0 12px #51eaff);
+    animation: slice-flash 160ms ease-out forwards;
+}
+
+.home-level .level-track span {
+    display: block;
+    width: 0%;
+}
+
+@keyframes fruit-impact {
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.16) rotate(-5deg);
+    }
+
+    100% {
+        transform: scale(0.82);
+        opacity: 0.25;
+    }
+}
+
+@keyframes fruit-half-left {
+    to {
+        transform: translate(-15px, -8px) rotate(-25deg);
+        opacity: 0;
+    }
+}
+
+@keyframes fruit-half-right {
+    to {
+        transform: translate(15px, 8px) rotate(25deg);
+        opacity: 0;
+    }
+}
+
+@keyframes slice-flash {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@media (max-width: 700px) {
+    .home-mode-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .home-mode-fruit {
+        font-size: 3.2rem;
+    }
+
+    .mobile-menu-heading {
+        display: block;
+        text-align: center;
+    }
+}
+
+
 @keyframes home-ring-text-spin {
     from {
         transform: rotate(0deg);
