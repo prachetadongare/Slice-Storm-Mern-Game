@@ -480,6 +480,78 @@
     width: 0%;
 }
 
+
+.home-resources {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 100;
+}
+
+.home-menu-button {
+    position: relative;
+    z-index: 102;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.home-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    min-width: 180px;
+    padding: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    background: #171329;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    color: #fff;
+    pointer-events: auto;
+}
+
+.home-player {
+    display: block;
+    color: #ded5ff;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+.home-dropdown button {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid rgba(255, 100, 100, 0.4);
+    border-radius: 8px;
+    background: rgba(220, 55, 75, 0.18);
+    color: #fff;
+    text-align: left;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.home-dropdown button:hover {
+    background: rgba(220, 55, 75, 0.35);
+}
+
+
+
+.home-menu-wrapper {
+    position: relative;
+    z-index: 200;
+    flex-shrink: 0;
+}
+
+.home-menu-wrapper .home-dropdown {
+    top: calc(100% + 10px);
+    right: 0;
+}
+
+
 @keyframes fruit-impact {
     0% {
         transform: scale(1);

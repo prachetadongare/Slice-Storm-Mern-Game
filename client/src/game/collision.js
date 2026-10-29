@@ -1,19 +1,17 @@
 export function distanceToSegment(point, start, end) {
   const dx = end.x - start.x;
   const dy = end.y - start.y;
+  const lengthSquared = dx * dx + dy * dy;
 
-  // Handle a stationary pointer.
-  if (dx === 0 && dy === 0) {
+  if (lengthSquared === 0) {
     return Math.hypot(point.x - start.x, point.y - start.y);
   }
 
-  // Project the point onto the swipe segment.
   const t = Math.max(
     0,
     Math.min(
       1,
-      ((point.x - start.x) * dx + (point.y - start.y) * dy) /
-        (dx * dx + dy * dy),
+      ((point.x - start.x) * dx + (point.y - start.y) * dy) / lengthSquared,
     ),
   );
 
@@ -24,7 +22,8 @@ export function distanceToSegment(point, start, end) {
 }
 
 export function swipeHitsFruit(start, end, fruit) {
-  const distance = distanceToSegment({ x: fruit.x, y: fruit.y }, start, end);
+  const tolerance = 8;
+  const radius = (fruit.radius || 0) + tolerance;
 
-  return distance <= fruit.radius;
+  return distanceToSegment({ x: fruit.x, y: fruit.y }, start, end) <= radius;
 }

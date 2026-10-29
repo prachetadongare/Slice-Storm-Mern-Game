@@ -1,0 +1,100 @@
+/* src/styles/gameCanvas.css */
+
+.game-screen {
+    position: relative;
+    width: 100%;
+    min-height: 100svh;
+    overflow: hidden;
+    isolation: isolate;
+    color: #fff3d6;
+    background:
+        linear-gradient(90deg,
+            rgba(28, 12, 5, 0.45),
+            rgba(20, 8, 3, 0.12),
+            rgba(28, 12, 5, 0.45)),
+        repeating-linear-gradient(0deg,
+            #56301b 0px,
+            #704027 35px,
+            #4a2715 39px,
+            #75462b 78px);
+}
+
+.game-screen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.45;
+    background:
+        repeating-linear-gradient(90deg,
+            transparent 0px,
+            transparent 190px,
+            rgba(20, 8, 2, 0.65) 192px,
+            rgba(20, 8, 2, 0.65) 196px,
+            transparent 199px),
+        linear-gradient(180deg,
+            rgba(0, 0, 0, 0.35),
+            transparent 25%,
+            transparent 75%,
+            rgba(0, 0, 0, 0.4));
+}
+
+.game-screen .game-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: none;
+    margin: 0;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: crosshair;
+}
+
+.game-screen .game-toolbar {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 18px;
+    background: rgba(27, 12, 5, 0.76);
+    border-bottom: 2px solid rgba(226, 174, 105, 0.45);
+}
+
+.game-screen .back-button {
+    padding: 9px 14px;
+    color: #fff0d2;
+    background: #71351e;
+    border: 1px solid #b87b45;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.game-screen .mode-badge,
+.game-screen .score-placeholder {
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.game-screen .game-hint {
+    margin: 0;
+    padding: 10px 16px;
+    text-align: center;
+    color: #ffe0ad;
+    background: rgba(27, 12, 5, 0.7);
+}
+
+@media (max-width: 600px) {
+    .game-screen .game-toolbar {
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .game-screen .game-toolbar>* {
+        font-size: 12px;
+    }
+}

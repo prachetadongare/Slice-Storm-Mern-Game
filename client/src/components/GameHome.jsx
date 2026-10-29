@@ -239,25 +239,45 @@ function GameHome({ user, onLogout, onPlay }) {
             ⭐ <strong>0</strong>
           </div>
 
-          <button
-            type="button"
-            className="home-menu-button"
-            onClick={() => setMenuOpen((open) => !open)}
-            aria-expanded={menuOpen}
-          >
-            ☰ MENU
-          </button>
+          <div className="home-menu-wrapper">
+            <button
+              type="button"
+              className="home-menu-button"
+              aria-expanded={menuOpen}
+              aria-controls="home-account-dropdown"
+              onPointerDown={(event) => event.stopPropagation()}
+              onClick={(event) => {
+                event.stopPropagation();
+                setMenuOpen((open) => !open);
+              }}
+            >
+              ☰ MENU
+            </button>
 
-          {menuOpen && (
-            <div className="home-dropdown">
-              <span className="home-player">
-                {user?.username || user?.name || "Player"}
-              </span>
-              <button type="button" onClick={onLogout}>
-                Log out
-              </button>
-            </div>
-          )}
+            {menuOpen && (
+              <div
+                id="home-account-dropdown"
+                className="home-dropdown"
+                onPointerDown={(event) => event.stopPropagation()}
+                onPointerMove={(event) => event.stopPropagation()}
+              >
+                <span className="home-player">
+                  {user?.username || user?.name || user?.email || "Player"}
+                </span>
+
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setMenuOpen(false);
+                    onLogout?.();
+                  }}
+                >
+                  Log out
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 

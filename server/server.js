@@ -9,6 +9,21 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://slice-storm-game-git-master-pracheta-dongares-projects.vercel.app/",
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
+
+app.use(express.json());
+
 app.get("/api", (req, res) => {
   res.json({
     success: true,

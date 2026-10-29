@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { GAME_WIDTH, GAME_HEIGHT } from "../game/gameConfig";
 import { createFruit, updateFruit, isFruitOutOfBounds } from "../game/fruit";
 import { swipeHitsFruit } from "../game/collision";
+import "../styles/gameCanvas.css";
 
 const TRAIL_LIFETIME = 180;
 const MAX_TRAIL_POINTS = 24;
@@ -184,42 +185,83 @@ function GameCanvas({ onScoreChange }) {
 
       event.preventDefault();
 
-      const currentPoint = getPoint(event);
+      // Recover intermediate movement samples when the browser provides them.
+      const samples =
+        typeof event.getCoalescedEvents === "function"
+          ? event.getCoalescedEvents()
+          : [];
+
+      const points = samples.length ? samples : [event];
+
+      // Ensure the final pointer position is processed.
+      const lastSample = points[points.length - 1];
 
       if (
-        currentPoint.x === previousPoint.x &&
-        currentPoint.y === previousPoint.y
+        lastSample.clientX !== event.clientX ||
+        lastSample.clientY !== event.clientY
       ) {
-        return;
+        points.push(event);
       }
 
-      trail.push({
-        ...currentPoint,
-        time: performance.now(),
-      });
+      for (const sample of points) {
+        const currentPoint = getPoint(sample);
 
-      if (trail.length > MAX_TRAIL_POINTS) {
-        trail.splice(0, trail.length - MAX_TRAIL_POINTS);
-      }
-
-      // Slice only fruits that the swipe actually intersects.
-      for (const fruit of fruits) {
         if (
-          fruit.sliced ||
-          !swipeHitsFruit(previousPoint, currentPoint, fruit)
+          currentPoint.x === previousPoint.x &&
+          currentPoint.y === previousPoint.y
         ) {
           continue;
         }
 
-        const hitPoint = {
-          x: fruit.x,
-          y: fruit.y,
-        };
+        const now = performance.now();
 
-        splitFruit(fruit, previousPoint, currentPoint, hitPoint);
+        trail.push({
+          ...currentPoint,
+          time: now,
+        });
+
+        if (trail.length > MAX_TRAIL_POINTS) {
+          trail.splice(0, trail.length - MAX_TRAIL_POINTS);
+        }
+
+        // Slice every fruit intersected by this part of the swipe.
+        for (const fruit of fruits) {
+          if (
+            fruit.sliced ||
+            !swipeHitsFruit(previousPoint, currentPoint, fruit)
+          ) {
+            continue;
+          }
+
+          // Find the closest point on the swipe to the fruit center.
+          const dx = currentPoint.x - previousPoint.x;
+          const dy = currentPoint.y - previousPoint.y;
+          const lengthSquared = dx * dx + dy * dy;
+
+          const t =
+            lengthSquared === 0
+              ? 0
+              : Math.max(
+                  0,
+                  Math.min(
+                    1,
+                    ((fruit.x - previousPoint.x) * dx +
+                      (fruit.y - previousPoint.y) * dy) /
+                      lengthSquared,
+                  ),
+                );
+
+          const hitPoint = {
+            x: previousPoint.x + t * dx,
+            y: previousPoint.y + t * dy,
+          };
+
+          // splitFruit marks the fruit as sliced, preventing duplicate scoring.
+          splitFruit(fruit, previousPoint, currentPoint, hitPoint);
+        }
+
+        previousPoint = currentPoint;
       }
-
-      previousPoint = currentPoint;
     }
 
     function handlePointerUp(event) {
