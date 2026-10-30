@@ -11,7 +11,7 @@ app.use(express.json());
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://slice-storm-game-git-master-pracheta-dongares-projects.vercel.app/",
+  "https://slice-storm-game.vercel.app",
 ];
 
 app.use(
